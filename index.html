@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transition Event</title>
+    <title>Animation Event</title>
     <style>
+        @keyframes ball-ani {
+            from {
+                transform : translate(0,0);
+            }
+            to {
+                transform: translate(200px, 200px);
+            }
+        }
         /*ball 주변에 margin이 있어서, 마우스와 ball이 딱 맞지 않음
           ball position를 absolute로 하거나,
           margin를 없애주는 걸 해야함 : ball의 왼위-> 마우스*/
@@ -15,11 +23,23 @@
             /*margin : -15px 0 0 -15px;*/
             border-radius: 50%; /*동그랗게*/
             background: red;
-            transition : 1s;
+
+            /*animation : ball-ani 1s 3 alternate forwards;*/
+            /*
+            animation-duration : 1s;
+            animation-timing-function :ease;
+            animation-delay : 0s;
+            animation-iteration-count :3;
+            animation-direction : alternate;
+            animation-fill-mode : forwards;
+            animation-play-state : running;
+            animation-name : ball-ani;
+            */
         }
         .ball.end {
-            background : dodgerblue;
+            border : 5px solid dodgerblue;
         }
+        
     </style>
 </head>
 <body>
@@ -27,19 +47,20 @@
 
 <script>
     const ballElem = document.querySelector('.ball');
+    //click를 하면 animation를 style에 넣는 방식으로..
+    ballElem.addEventListener('click', function(){
+        ballElem.style.animation = 'ball-ani 1s 3 alternate forwards';
+    });
 
-    window.addEventListener('click', function(e){
-        console.log(e.clientX, e.clientY);//클릭하는 위치
-        ballElem.style.transform = 'translate(' + (e.clientX-20 ) + 'px, ' + (e.clientY-20) + 'px)';
-        //'translate(0px, 0px)'
-    })
-
-    ballElem.addEventListener('transitionend', function(e){
-        //transitionend : transition이 끝난 시점에서 실행되는 이벤트
-        //transitionstart
+    ballElem.addEventListener('animationend', function(e){
+        
+        //animationend
+        //animationstart
         ballElem.classList.add('end');
-        console.log(e.elapsedTime); // transition-duration를 나타냄
-        console.log(e.propertyName); //transform, background-color
+    });
+
+    ballElem.addEventListener('animationiteration',  function(){
+        console.log('iteration!!'); //2번 반복임
     })
 </script>    
 </body>
